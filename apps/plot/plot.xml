@@ -15205,6 +15205,7 @@ i.font-size-giant {
               </thead>
  						[loop.@my_row module.dataset.rows]
               [aw2.get main=@my_row.item.{module.main_heading_key} o.set='module.xyz' /]
+			   [php.sanitize_title p1="{module.xyz}" o.set="module.xyz"/]
               [aw2.get @my_row.item  o.set=module.datanewset.{module.xyz}.new /]
             [/loop.@my_row]
             [if.not_empty module.datanewset]   
