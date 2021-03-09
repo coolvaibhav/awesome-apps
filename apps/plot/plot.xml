@@ -13841,15 +13841,22 @@ i.font-size-giant {
     [query]              
         [pagesize]100[/pagesize]
         [with]
-          [sql]
-            SELECT coll_id as data_id, object_id  FROM `plot` where coll_type = 'task' and meta_key='task_status' 
+           [sql]
+            SELECT distinct object_id as data_id FROM `plot_activities` where coll_type = 'task' and meta_key='activity_id' 
              [if.not_whitespace form_data.to_date]
                        and date(stamp) <= date('[env.get form_data.to_date /]')	
              [/if.not_whitespace] 
 				     [if.not_whitespace form_data.from_date]
                        and date(stamp) >= date('[env.get form_data.from_date /]')	
-             [/if.not_whitespace] 
+             [/if.not_whitespace]
           [/sql] 
+          [add_field new ]
+              [sql raw]
+                select [module.previous_query_no /].* , object_id  
+                from [module.previous_query_no /] JOIN plot 
+                ON [module.previous_query_no /].data_id = plot.coll_id and coll_type='task' AND meta_key='task_id'
+              [/sql]
+          [/add_field]
           [add_field new ]
               [sql raw]
                 select [module.previous_query_no /].* , STR_TO_DATE(meta_value,'%d-%m-%Y') AS task_due_date   
