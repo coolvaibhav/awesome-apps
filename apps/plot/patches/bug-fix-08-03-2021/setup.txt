@@ -15,3 +15,5 @@ with
               [php.sanitize_title p1="{module.xyz}" o.set="module.xyz"/]
               [aw2.get @my_row.item  o.set=module.datanewset.{module.xyz}.new /]
 [/loop.@my_row]
+
+2. Go to moudle Plot/module/task-worked-upon and replace the whole code with the in "task-worked-upon.txt" file.
