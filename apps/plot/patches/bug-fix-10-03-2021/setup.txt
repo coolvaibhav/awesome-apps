@@ -1,0 +1,4 @@
+Patch for release notes
+
+1.Go to moudle Plot/module/userwise-daywise-timespent-on-tasks and replace the whole code with the in "userwise-daywise-timespent-on-tasks.txt" file.
+2. Go to moudle Plot/module/userwise-timespent-on-tasks and replace the whole code with the in "userwise-timespent-on-tasks.txt" file.

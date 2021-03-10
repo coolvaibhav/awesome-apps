@@ -1,0 +1,136 @@
+[templates.add main]
+[module.set_array tasks_timeline]
+  [after_submit raw]
+    [query]              
+        [pagesize]100[/pagesize]
+        [atts query_count=no /]
+        [with]
+          [sql]
+            select object_id as data_id, TIME_FORMAT(SEC_TO_TIME(cast(sum(meta_value) as int)), '%H:%i') as total_time_spent,updated_by   
+                from  plot 
+                where coll_type='task_feedback' AND meta_key='time_spent' 
+             [if.not_whitespace form_data.to_date]
+                       and date(stamp) <= date('[env.get form_data.to_date /]')	
+             [/if.not_whitespace] 
+				     [if.not_whitespace form_data.from_date]
+                       and date(stamp) >= date('[env.get form_data.from_date /]')	
+             [/if.not_whitespace] 
+             [if.not_empty form_data.developers]
+              			and updated_by in ([env.form_data.developers.comma.quote_comma /])
+             [/if.not_empty]
+             group by data_id , updated_by having total_time_spent > '00:00'
+          [/sql] 
+          [add_field new ]
+              [sql raw]
+                select [module.previous_query_no /].* , object_id as story_id   
+                from [module.previous_query_no /] LEFT JOIN plot 
+                ON [module.previous_query_no /].data_id = plot.coll_id AND coll_type="task" AND meta_key="story_id"
+              [/sql]
+          [/add_field] 
+          [add_field new ]
+              [sql raw]
+                select [module.previous_query_no /].* , meta_value as story_title 
+                from [module.previous_query_no /] LEFT JOIN plot 
+                ON [module.previous_query_no /].story_id = plot.object_id and coll_type="user_stories" 
+                 AND meta_key="story_title"
+              [/sql]
+          [/add_field]
+          [add_field new ]
+              [sql raw]
+                select [module.previous_query_no /].* , meta_value as task_title 
+                from [module.previous_query_no /] LEFT JOIN plot 
+                ON [module.previous_query_no /].data_id = plot.coll_id and coll_type="task" 
+                 AND meta_key="task_title"
+              [/sql]
+          [/add_field]
+          [add_field new ]
+              [sql raw]
+                select [module.previous_query_no /].* , meta_value as task_due_date 
+                from [module.previous_query_no /] LEFT JOIN plot 
+                ON [module.previous_query_no /].data_id = plot.coll_id and coll_type="task" 
+                 AND meta_key="task_due_date"
+              [/sql]
+          [/add_field]
+          [add_field new ]
+              [sql raw]
+                select [module.previous_query_no /].* , meta_value as task_status 
+                from [module.previous_query_no /] LEFT JOIN plot 
+                ON [module.previous_query_no /].data_id = plot.coll_id and coll_type="task" 
+                 AND meta_key="task_status"
+              [/sql]
+          [/add_field]
+          [add_field new ]
+              [sql raw]
+                select [module.previous_query_no /].* , meta_value as task_created_datetime 
+                from [module.previous_query_no /] LEFT JOIN plot 
+                ON [module.previous_query_no /].data_id = plot.coll_id and coll_type="task" 
+                 AND meta_key="task_created_datetime"
+              [/sql]
+          [/add_field]
+        [/with]   
+    [/query]
+    [table]     
+            [column new label='Task']
+              [calc raw] 
+              	[if.equal lhs='{form_data.submit_handler}' rhs='datatable']
+                <a target="_blank" href='[app.path /]/task/[aw2.get row.data_id /]' rel="noopener noreferrer" class="brand-primary">
+                  [aw2.get row.task_title /]
+                </a>
+                 [/if.equal]
+                [if.else]
+                		 [aw2.get row.task_title /]
+                [/if.else]
+               [/calc]
+            [/column]   
+            [column new label='Task' cond='{form_data.submit_handler}' equal='csv']
+              [calc raw] 
+                		[app.path /]/task/[aw2.get row.task_id /]
+               [/calc]
+            [/column]    		  
+            [column new label='User story' ]
+              [calc raw]
+              	[if.equal lhs='{form_data.submit_handler}' rhs='datatable']
+                 <a target="_blank" href='[app.path /]/user-story/[aw2.get row.story_id /]' rel="noopener noreferrer" class="brand-primary">
+                  [aw2.get row.story_title /]
+                </a>
+                [/if.equal]
+                [if.else]
+                		[aw2.get row.story_title /]
+                [/if.else]
+                
+              [/calc]
+            [/column]            
+						[column new label='Assigned To']
+                [calc raw]
+                	 [query.get_user_by field='email' value='{row.updated_by}' o.set='template.user' /]
+                   [template.get user.display_name /]
+                [/calc]
+            [/column]
+             [column new label='Total Time Spent <br> (HH:MM)']
+                [calc raw]
+                   [aw2.get row.total_time_spent  /]
+                [/calc]
+            [/column]               
+            [column new label='Status']
+               [calc raw]
+                   [aw2.get row.task_status /]
+                [/calc]
+            [/column]                                         
+    [/table]
+	[/after_submit]
+  [handlers]
+      [datatable label='Show Tasks'][/datatable]    
+      [csv filename='task-worked-upon.csv' label='Download Report' pagesize='1000' ][/csv]
+  [/handlers]
+  [filters]
+     [section period keys="from_date,to_date" /]
+     [section filter keys="developers" /]
+  [/filters]
+[/module.set_array]   
+	[env.set app.page_title="Userwise Time Spent on Tasks Report - Plot" /]
+  <div class="body-content-wrapper">
+    <section role="tasks" class="tasks">
+       [plot.search-filter.main args="{module.tasks_timeline}" title='Userwise Time Spent on Tasks'  /]
+    </section>
+  </div>
+[/templates.add]
