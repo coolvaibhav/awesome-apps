@@ -15024,7 +15024,7 @@ i.font-size-giant {
   [after_submit raw]
     [query]              
         [pagesize]100[/pagesize]
-        [atts query_count=no  /]
+        [atts query_count=no /]
         [with]
           [sql]
             select object_id as data_id, TIME_FORMAT(SEC_TO_TIME(cast(sum(meta_value) as int)), '%H:%i') as total_time_spent,updated_by, date(stamp) as activity_date   
@@ -15036,6 +15036,9 @@ i.font-size-giant {
 				     [if.not_whitespace form_data.from_date]
                        and date(stamp) >= date('[env.get form_data.from_date /]')	
              [/if.not_whitespace] 
+             [if.not_empty form_data.developers]
+              			and updated_by in ([env.form_data.developers.comma.quote_comma /])
+             [/if.not_empty]
              group by data_id , updated_by, activity_date having total_time_spent > '00:00'
           [/sql] 
           [add_field new ]
@@ -15067,15 +15070,6 @@ i.font-size-giant {
                  AND meta_key="story_title"
               [/sql]
            [/add_field]
-            [filter new not_empty={form_data.developers}]
-          	[sql raw]
-              select [module.previous_query_no /].* from plot join [module.previous_query_no /] on 
-              [module.previous_query_no /].data_id=plot.object_id 
-                          where 
-             coll_type='task_feedback' AND meta_key='task_feedback_created_by' and meta_value in ([env.form_data.developers.comma.quote_comma /])
-                        
-            [/sql]
-          [/filter] 
         [/with]   
         [order]
              activity_date ASC
@@ -15085,7 +15079,7 @@ i.font-size-giant {
             [column new label='Task']
               [calc raw] 
               	[if.equal lhs='{form_data.submit_handler}' rhs='datatable']
-                <a target="_blank" href='[app.path /]/task/[aw2.get row.task_id /]' rel="noopener noreferrer" class="brand-primary">
+                <a target="_blank" href='[app.path /]/task/[aw2.get row.data_id /]' rel="noopener noreferrer" class="brand-primary">
                   [aw2.get row.task_title /]
                 </a>
                  [/if.equal]
