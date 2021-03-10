@@ -14875,6 +14875,9 @@ i.font-size-giant {
 				     [if.not_whitespace form_data.from_date]
                        and date(stamp) >= date('[env.get form_data.from_date /]')	
              [/if.not_whitespace] 
+             [if.not_empty form_data.developers]
+              			and updated_by in ([env.form_data.developers.comma.quote_comma /])
+             [/if.not_empty]
              group by data_id , updated_by having total_time_spent > '00:00'
           [/sql] 
           [add_field new ]
@@ -14891,44 +14894,46 @@ i.font-size-giant {
                 ON [module.previous_query_no /].story_id = plot.object_id and coll_type="user_stories" 
                  AND meta_key="story_title"
               [/sql]
-           [/add_field]
-          [filter new not_empty={form_data.developers}]
-          	[sql raw]
-              select [module.previous_query_no /].* from plot join [module.previous_query_no /] on 
-              [module.previous_query_no /].data_id=plot.object_id 
-                          where 
-             coll_type='task_feedback' AND meta_key='task_feedback_created_by' and meta_value in ([env.form_data.developers.comma.quote_comma /])
-                        
-            [/sql]
-          [/filter] 
+          [/add_field]
+          [add_field new ]
+              [sql raw]
+                select [module.previous_query_no /].* , meta_value as task_title 
+                from [module.previous_query_no /] LEFT JOIN plot 
+                ON [module.previous_query_no /].data_id = plot.coll_id and coll_type="task" 
+                 AND meta_key="task_title"
+              [/sql]
+          [/add_field]
+          [add_field new ]
+              [sql raw]
+                select [module.previous_query_no /].* , meta_value as task_due_date 
+                from [module.previous_query_no /] LEFT JOIN plot 
+                ON [module.previous_query_no /].data_id = plot.coll_id and coll_type="task" 
+                 AND meta_key="task_due_date"
+              [/sql]
+          [/add_field]
+          [add_field new ]
+              [sql raw]
+                select [module.previous_query_no /].* , meta_value as task_status 
+                from [module.previous_query_no /] LEFT JOIN plot 
+                ON [module.previous_query_no /].data_id = plot.coll_id and coll_type="task" 
+                 AND meta_key="task_status"
+              [/sql]
+          [/add_field]
+          [add_field new ]
+              [sql raw]
+                select [module.previous_query_no /].* , meta_value as task_created_datetime 
+                from [module.previous_query_no /] LEFT JOIN plot 
+                ON [module.previous_query_no /].data_id = plot.coll_id and coll_type="task" 
+                 AND meta_key="task_created_datetime"
+              [/sql]
+          [/add_field]
         [/with]   
-    [transform ref_id=data_id /]
-          [meta new]
-           [table]plot[/table]
-						[meta_keys]story_id, task_id, task_title, task_due_date, task_status,task_created_datetime,task_assigned_to[/meta_keys] 
-           [id_field]coll_id[/id_field]
-          [/meta]
-          [meta new]
-           [sql raw]
-              SELECT 'meta' AS type,data_id AS data_id,'story_title' AS meta_key,story_title AS meta_value FROM bounded_data
-           [/sql]
-          [/meta] 
-          [meta new]
-            [sql raw]
-              SELECT 'meta' AS type,data_id AS data_id,'total_time_spent' AS meta_key,total_time_spent AS meta_value FROM bounded_data
-            [/sql]
-          [/meta] 
-          [meta new]
-            [sql raw]
-              SELECT 'meta' AS type,data_id AS data_id,'updated_by' AS meta_key,updated_by AS meta_value FROM bounded_data
-            [/sql]
-          [/meta] 
     [/query]
     [table]     
             [column new label='Task']
               [calc raw] 
               	[if.equal lhs='{form_data.submit_handler}' rhs='datatable']
-                <a target="_blank" href='[app.path /]/task/[aw2.get row.task_id /]' rel="noopener noreferrer" class="brand-primary">
+                <a target="_blank" href='[app.path /]/task/[aw2.get row.data_id /]' rel="noopener noreferrer" class="brand-primary">
                   [aw2.get row.task_title /]
                 </a>
                  [/if.equal]
