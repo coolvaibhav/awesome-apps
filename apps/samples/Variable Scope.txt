@@ -1,0 +1,35 @@
+[templates.add main]
+	
+  //** Template Level variable	**//
+  [template.set t1="Template Level variable" /]
+	  
+	//** module level variable **//
+  [module.set m1="module Level variable" /]
+	
+	//** environment level variable **//
+	[env.set e1="env Level variable" /] 
+  
+	//** user defined/custom scope	**//
+  [do.@sample]
+  	
+    [env.set @sample.s1="user defined scope" /]
+    [env.@sample.s1/]
+  [/do.@sample]
+	
+	
+	<br/>Template Level variable : [template.t1/]	
+	
+	<br/>user defined/custom scope?????? : [env.@sample.s1/]
+	
+  [templates.new_template /]
+  
+[/templates.add]
+
+[templates.add new_template]
+	
+  <br/>module level variable : [module.m1 /]
+  
+  <br/>Template Level variable (This will not generate any output) ???? : [template.t1 /]
+  
+  <br/>environment level variables :[env.e1 /]
+[/templates.add]
