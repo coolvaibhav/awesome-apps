@@ -1,0 +1,42 @@
+[templates.add main]
+	
+  //**Some advance concepts in loop**//
+  
+ 
+  [template.set_array month new="Jan"/]
+  [template.set_array month new="Feb"/]
+  [template.set_array month new="March"/]
+  
+  [template.set_array days new="1" /]
+  [template.set_array days new="2" /]
+  [template.set_array days new="3" /]
+  [template.set_array days new="4" /]
+  [template.set_array days new="5" /]
+    
+  
+  //**First**//
+  [loop.@m template.month]
+  	Month : [env.get @m.item/]
+    
+      [loop.@d template.days]
+        Day : - [env.get @d.item/] <br/>
+      [/loop.@d]
+      
+    <br/>
+  [/loop.@m]
+   
+
+   
+   
+   [loop.@i start="1" stop=10 step=1]   	      
+      [if.true @i.odd] ODD :: [env.get @i.item]  [/if.true]    <br/>  
+      [if.true @i.even] Even :: [env.get @i.item]  [/if.true]     <br/>
+      
+      
+   [/loop.@i]
+   
+  [template.dump/]
+  
+  
+  
+[/templates.add]
