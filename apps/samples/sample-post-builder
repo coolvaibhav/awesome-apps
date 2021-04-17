@@ -1,0 +1,30 @@
+[templates.add main]
+	
+  [query.posts_builder part=start]
+    {
+      "posts_per_page": "-1",
+      "post_type": "testimonials",
+      "post_status": "publish",
+      "order": "ASC",
+      "orderby": "date"
+    }
+  [/query.posts_builder]
+   [query.posts_builder part=meta_query]
+   {
+     "key": "testimonial_author",
+     "value": "test author 2",
+     "compare": "="
+   }
+  [/query.posts_builder]
+  [query.posts_builder part=tax_query]
+    {
+    "taxonomy": "testimonial_type",
+    "field": "slug",
+    "terms": "test-1"
+    }
+ 	[/query.posts_builder]
+ 
+	[query.posts_builder part=run set="template.result" /]
+  [template.result.dump /]
+  
+[/templates.add]
