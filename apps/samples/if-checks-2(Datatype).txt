@@ -1,0 +1,72 @@
+[templates.add main]
+  <h4>Datatype checks</h4>
+  //**array**//
+  [template.set_array ack new="jan"/]
+  [template.set_array ack new="feb"/]
+  [template.set_array ack new="mar"/]
+  
+  //**string**//
+  [template.set str_var="My string"/]
+  
+  //**int**//
+  [int.create 12 o.set=template.int_num/]
+  
+  //**Num**//
+  [num.create 13.45 o.set=template.num/]
+  [template.dump/]
+  <ol>
+    //**Array check**//
+    [if.arr template.ack]
+      <li>It is array</li>
+    [/if.arr]
+    [if.not_arr template.str_var]
+      <li><b>[template.str_var/]</b> is not array</li>	
+    [/if.not_arr]
+
+    //**integer check**//
+    [if.int template.int_num]
+      <li>[template.int_num/] is integer</li>
+    [/if.int]
+    [if.not_int template.str_var]
+      <li>[template.str_var/] It is not integer</li>
+    [/if.not_int]
+
+    //**string check**//
+    [if.str template.str_var]
+    <li> <b>[template.get str_var /] </b>It is string</li>
+    [/if.str]
+    [if.not_str template.int_num]
+      <li><b>[template.int_num/] </b>It is not string</li>
+    [/if.not_str]
+
+     //**number check**//
+    [if.num template.num]
+      <li>[template.num/] It is number</li>
+    [/if.num]
+    [if.not_num template.str_var]
+    	<li>[template.str_var/] It is not number </li>
+    [/if.not_num]
+
+    [if.not_date_obj template.str_var]
+      <li> [template.str_var/] is not date</li>
+    [/if.not_date_obj]
+
+
+    //**Check the single value in array**//
+    [if.contains needle="jan" haystack={template.ack}]
+      <li>jan found</li>
+    [/if.contains]
+    [if.not_contains needle="dec" haystack={template.ack}]
+      <li>Dec not found</li>
+    [/if.not_contains]
+
+    //**Check the single value in comma seperated string**//
+    [if.contains needle="feb" haystack="s:jan,feb,mar,apr"]
+      <li>Feb found</li>
+    [/if.contains]
+    [if.not_contains needle="aug" haystack="s:jan,feb,mar,apr"]
+      <li>aug not found</li>
+    [/if.not_contains]
+  
+  </ol>
+[/templates.add]
