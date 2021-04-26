@@ -1,0 +1,78 @@
+[templates.add main]
+
+<h3>Arrays in Awesome Enterprise</h3>
+
+ Array Delaration
+  <pre>
+    Type 1:
+    
+       0 => 'Fitst Name'
+       1 => 'Last Name'
+       2 => 'email_id'
+   </pre>	 
+  [template.set_array type_1 new="first_name"/]
+  [template.set_array type_1 new="last_name"/]
+  [template.set_array type_1 new="email_id"/]
+  
+  [template.type_1.dump/]
+   
+  <pre>
+    Type 2 :
+    
+      'first_name'=>'amit'
+      'last_name'=>'singh'
+      'email_id'=>'sample@sample.com'
+  </pre>
+  
+  [template.set_array type_2 first_name="amit" last_name="singh" email_id="sample@sample.com"/]
+  
+  [template.type_2.dump/]
+  
+	<pre>
+    Type 3 :
+    
+      0 => array(
+            fitst_name => 'amit',
+            last_name  => 'singh',
+            email_id   => 'amit@sample.com'
+            )
+      1 = > array(
+            fitst_name => 'ravi',
+          	fitst_name  => 'singh',
+            email_id   => 'ravi@sample.com'
+            )
+	</pre>
+  
+  [template.set_array type_3.new first_name="amit" last_name="singh" email_id="amit@sample.com"/]
+  
+  [template.set_array type_3.new FIRST_NAMEEEEEEE="ravi" last_name="singh" email_id="ravi@sample.com"/]
+  
+  [template.type_3.dump/]
+  
+  <pre>
+    Type 4 :
+    
+      'FirstName=>'Amit',
+      'LastName'=>'Singh'
+  </pre>
+  
+  [template.set_array type_4]
+  	[FirstName]Amit[/FirstName]
+  	[LastName]Singh[/LastName]
+    
+    [email_id _value="sample@sample.com"/]
+    
+    [contact]
+    	[number new mobile_number="123" landline_number='456'][/number]
+    	[addr new addr_line1="addr1" addr_line2='addr2'][/addr]
+    [/contact]
+    
+  [/template.set_array]
+  [template.type_4.dump/]
+  
+  [arr.create o.set=template.type_5]
+  	[number new mobile_number="123" landline_number='456'][/number]
+  [/arr.create]
+
+ [template.type_5.dump/]
+[/templates.add]
