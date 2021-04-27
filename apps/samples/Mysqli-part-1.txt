@@ -1,0 +1,89 @@
+[templates.add main]
+  
+  //**
+  	Desc : This will help us to manage CREATE,UPDATE,DELETE COMMAND
+    	Data Definition Language (DDL) and Data Manipulation Language (DML) 
+    return : <array>**//
+    
+  //****//
+  [mysqli.cud o.set=template.result.cud]
+  	create table sample_test (
+      id int primary key,
+      name varchar(255)
+    );
+    
+    insert into sample_test (id,name) values (1,'Rajesh'),(2,'Ramesh');
+    
+    #update  sample_test set name="SAM" where id=1;
+    
+    #delete from sample_test where id=1;
+    
+    #alter table sample_test add column city varchar(255);
+    
+    #truncate table sample_test;
+    
+    #drop table demo;
+    
+  [/mysqli.cud]
+  
+    //**
+
+      Desc : Fetch multiple rows from table
+      	Data Query Language (DQL)
+      return : <return>  
+    **//
+    [mysqli.fetch.rows o.set=template.result.rows]
+      select * from sample_test;
+    [/mysqli.fetch.rows]
+
+
+    
+    //**
+      Desc : Fetch single row from table
+      return : <return>  
+    **//
+    [mysqli.fetch.row o.set=template.result.row]
+      select * from sample_test where id=1;
+    [/mysqli.fetch.row]
+
+
+    //**
+      Desc : This will help us to manage single row/alice to fetch.row
+      return : <return>  
+    **//
+    [mysqli.fetch.exactly_one_row o.set=template.result.exact_one_row]
+        select * from sample_test where id=1;
+    [/mysqli.fetch.exactly_one_row]
+
+
+
+    //**
+      Desc : Fetch only ONE column value
+      return : <return>  
+    **//
+    [mysqli.fetch.col o.set=template.result.col]
+       select name from sample_test ;
+    [/mysqli.fetch.col]
+
+
+    //**
+      Desc : performs a calculation on a set of values, and returns a single value. 
+      return : <return>  
+      example , min(), max(),count(),sum() etc
+    **//
+    [mysqli.fetch.scalar o.set=template.result.scalar]
+      select count(1) from sample_test; 
+    [/mysqli.fetch.scalar]
+    
+
+     //**
+      Desc : alice to scalar
+      return : <return>  
+      example , min(), max(),count(),sum() etc
+    **//
+     [mysqli.fetch.count o.set=template.result.count]
+      select count(1) from sample_test; 
+     [/mysqli.fetch.count]
+ 
+  [template.result.echo /]
+[/templates.add]
