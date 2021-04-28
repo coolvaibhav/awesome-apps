@@ -1,0 +1,138 @@
+[templates.add main]
+  
+  <h3> TCL (Transaction Control Language)</h3>
+  
+  //**
+  	Desc : This will help us to manage multiple queries CREATE,UPDATE,DELETE COMMAND
+    	Data Definition Language (DDL) and Data Manipulation Language (DML) 
+    return : <array>**//
+    
+
+  [mysqli.multi.cud o.set=template.result.cud]
+    
+    drop table if exists multi_sample_test ;
+    
+  	create table multi_sample_test (
+      id int primary key,
+      name varchar(255),
+      age int
+    );
+    
+    insert into multi_sample_test (id,name,age) values (1,'Rajesh',18),(2,'Ramesh',18);
+    
+    update multi_sample_test set name="SAM" where id=1;
+    
+    delete from multi_sample_test where id=1;
+    
+    alter table multi_sample_test add column city varchar(255);
+    
+    #truncate table multi_sample_test;
+    
+    #drop table multi_sample_test;
+    
+  [/mysqli.multi.cud]
+  
+    //**
+
+      Desc : Fetch multiple rows from table
+      	Data Query Language (DQL)
+      return : <return>  
+    **//
+    [mysqli.multi.fetch.rows o.set=template.result.rows]
+    	  set @age=18;
+        select * from multi_sample_test where age= @age;
+    [/mysqli.multi.fetch.rows]
+
+
+    
+    //**
+      Desc : Fetch single row from table
+      return : <return>  
+    **//
+    [mysqli.multi.fetch.row o.set=template.result.row]
+    	set @id=2;
+      select * from multi_sample_test where id=@id;
+    [/mysqli.multi.fetch.row]
+
+    //**
+      Desc : This will help us to manage single row/alice to fetch.row
+      return : <return>  
+    **//
+    [mysqli.multi.fetch.exactly_one_row o.set=template.result.exact_one_row]
+    		set @id=2;
+        select * from multi_sample_test where id=@id;
+    [/mysqli.multi.fetch.exactly_one_row]
+
+
+
+    //**
+      Desc : Fetch only ONE column value
+      return : <return>  
+    **//
+    [mysqli.multi.fetch.col o.set=template.result.col]
+    	 set @id=2;
+       select name from multi_sample_test where id=@id;
+    [/mysqli.multi.fetch.col]
+
+
+    //**
+      Desc : performs a calculation on a set of values, and returns a single value. 
+      return : <return>  
+      example , min(), max(),count(),sum() etc
+    **//
+    [mysqli.multi.fetch.scalar o.set=template.result.scalar]
+    	set @id=2;
+      select count(1) from multi_sample_test where id=@id; 
+    [/mysqli.multi.fetch.scalar]
+    
+
+     //**
+      Desc : alice to scalar
+      return : <return>  
+      example , min(), max(),count(),sum() etc
+    **//
+     [mysqli.multi.fetch.count o.set=template.result.count]
+     		set @id=2;
+      select count(1) from multi_sample_test where id=@id;
+     [/mysqli.multi.fetch.count]
+     
+     
+     //**
+     	commit the transaction
+     **//
+     [mysqli.transaction.commit  o.set=template.result.commit]
+     		
+        drop table if exists multi_sample_test_t2;
+        
+        create table multi_sample_test_t2 (
+        id int primary key,
+        name varchar(255),
+        age int
+        );
+
+        insert into multi_sample_test_t2 (id,name,age) values (1,'Rajesh',20),(2,'Ramesh',20);
+     [/mysqli.transaction.commit]
+     
+  
+     //**
+     	rollback the transaction
+     **//
+     [mysqli.transaction.rollback o.set=template.result.rollback]
+   		 update multi_sample_test_t2 set age=40 where id=1;
+     [/mysqli.transaction.rollback]
+     
+    
+     //**
+
+      Desc : Fetch multiple rows from table
+      	Data Query Language (DQL)
+      return : <return>  
+    **//
+    [mysqli.multi.fetch.row o.set=template.result.rollback_rows]
+    		set @id=1;
+        select * from multi_sample_test_t2 where id=@id;
+    [/mysqli.multi.fetch.row]
+     [debug.ignore]
+  [/debug.ignore]
+  [template.result.dump /]
+[/templates.add]

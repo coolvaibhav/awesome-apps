@@ -1,0 +1,33 @@
+[templates.add main]
+	
+  
+  //***Simple array**//
+  [template.set_array names new="Amit"/]
+  [template.set_array names new="Ravi"/]
+  [template.set_array names new="Raju"/]
+  [template.set_array names new="Ramesh"/]
+  
+  [template.names.count.echo /]
+  
+  [loop.@name template.names]
+   NEW VALUE:  	[env.get @name.item/] <br/>
+  [/loop.@name]
+  
+  //**Nested array**//
+  [template.set_array users.new first_name="Amit" last_name="Singh" /]
+  [template.set_array users.new first_name="Ravi" last_name="Kumar" /]
+  [template.set_array users.new first_name="Ramesh" last_name="soni" /]
+  
+  USers count [template.get users.count /]
+  
+  [loop.@user template.users]
+  	[env.@user.dump/]
+    First Name : [env.get @user.item.first_name/] <br/>
+    
+    Odd : [env.get @user.odd/] <br/>
+    Even : [env.get @user.even/] <br/>
+  [/loop.@user]
+  
+  
+  
+[/templates.add]
