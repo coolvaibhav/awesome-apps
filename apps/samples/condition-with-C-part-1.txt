@@ -1,0 +1,305 @@
+[templates.add main]
+	
+  //**Create string variable**//
+  [template.set x='testing' /]
+  [template.set y="demo" /]
+  [template.set str_yes='yes'/]
+  
+  [module.set success="Condition Matched"/]
+  
+  
+  //**Create array**//
+  [template.set_array user first_name="Ravi" last_name="kumar" city="pune" state="maharashtra" country="india" /]
+  
+  //**Create boolean variable**//
+  [bool.create false o.set=template.var_false/]
+ [template.dump/]
+ 
+ 
+<ol>
+
+  <li><h3>Conditions for and.* & or.*  <strong>or.{-}, and.{-}</strong></h3></li>
+    <ul>
+      <li> Example of and 
+        [template.set c_and c.not_empty="template.x" and.yes="template.str_yes"]
+            <b>[template.x/] </b> is not empty and other string [[template.str_yes/]] is [template.str_yes/]
+        [/template.set]      
+        [template.c_and.dump/]      
+      </li>
+     
+      <li> Example of multiple and 
+        [template.set multiple_and c.not_empty="template.x" and.not_empty="template.y" and.cond="template.x" and.eq="s:testing"]               
+        
+            This is example of multiple and
+
+       [/template.set]
+       [template.multiple_and.dump/]
+      </li>
+      <li>
+        Example of or
+        [template.set c_or c.cond="template.x" c.eq='s:testing of string' or.exists='template.user.first_name']
+          This is example of OR
+        [/template.set]
+        [template.c_or.dump/]
+      </li>
+    </ul>
+    
+  <li> <h3>Conditions for checking Equal & Not Equal <strong>c.eq, c.neq</strong> </h3> </li>    
+      <ul>
+        <li> 
+          [template.set test_eq c.cond='s:{template.x}' c.eq='s:testing']
+            [template.x/] equal to testing.
+          [/template.set]
+          [template.test_eq/]
+        </li>
+        <li> 
+          [template.set test_neq c.cond='s:{template.x}' c.neq='test']
+            [temmplate.x/] not equal to test.
+          [/template.set]
+          [template.test_neq/]
+        </li>
+      </ul>
+
+  <li><h3>Conditions for checking Greater than & Less than <strong>c.gt,c.gte,c.lt,c.lte </strong></h3></li>
+    [module.set y='5000' /]
+    <ul>
+
+
+    <li> 
+      <strong>Greater than</strong>
+      [do.test c.cond="n:{module.y}" c.gt="n:2000" ]
+        5000 is greater than 2000.
+      [/do.test]
+      Result: [module.success c.cond="n:{module.y}" c.gt="n:2000" /]
+    </li>
+
+    <li> 
+      <strong>Less than </strong>
+      [do.test c.cond="n:{module.y}" c.lt="n:6000" ]
+        5000 less than 6000.
+      [/do.test]
+      Result: [module.success c.cond="n:{module.y}" c.lt="n:6000" /]
+    </li>
+
+    <li> 
+    <strong>Less than Equal </strong>
+    [do.test c.cond="i:{module.y}" c.lte="n:5000" ]
+      5000 less than equal to 5000.
+    [/do.test]
+    Result: [module.success c.cond="i:{module.y}" c.lte="n:6000" /]
+    </li>
+
+    <li> 
+    <strong>Greater than Equal </strong>
+    [do.test c.cond="n:{module.y}" c.gte="5000" ]
+      5000 greater than equal to 5000.
+    [/do.test]
+    Result: [module.success c.cond="n:{module.y}" c.gte="n:4000" /]
+    </li>
+    </ul>
+
+
+  <li><h3>Conditions for checking Null : <strong>c.null / c.not_null </strong>  </h3></li>
+  <ul>
+    [str.create hello o.set=module.x_str /]
+    [arr.set module.arrset a={module.x_str} b='' c="hello"/]
+    <li>
+      <strong>Null Check</strong>: 
+      Result:[module.success c.null='module.x_str'/]<br />
+    </li>
+        <li>
+        <strong>c.null='null'</strong>: 
+        Result:[module.success c.null='null'/]
+      </li>
+      <li> <strong>Not null</strong>
+      Result:[module.success c.not_null='module.arrset'/]
+      </li>
+    </ul>
+
+    <li><h3>Conditions for checking Whitespaces <strong>c.ws, c.not_ws</strong></h3></li>
+    [module.set success='I suceeded' failed='I failed' /]
+    [str.create main='    ' o.set=module.whitespaces /]
+    <ul>
+    
+    <li><strong> c.ws='module.whitespaces'</strong> 
+    Result:[module.success c.ws='module.whitespaces'/]</li>
+    <li><strong> c.not_ws='module.failed'</strong> 
+    Result:[module.success c.not_ws='module.failed'/]</li>
+    </ul>
+    
+
+
+  <li><h3>Conditions for checking Empty <strong>c.empty, c.not_empty </strong> </h3></li>
+  [str.create hello o.set=module.x_str /]
+  [arr.set module.arrset a={module.x_str} b='' c="hello"/]
+  <ul>
+
+  <li> <strong>c.empty='module.x_str'</strong>
+       Result:[module.success c.empty='module.x_str'/]</li>
+  <li> <strong>c.empty='module.arrset.b'</strong>
+       Result:[module.success c.empty='module.arrset.b'/]</li>
+  <li> <strong>c.not_empty='module.arrset'</strong>
+       Result:[module.success c.not_empty='module.arrset'/]</li>
+  </ul>
+     
+  <li><h3>Conditions for checking Exists</h3></li>
+  [module.set success='I suceeded' failed='I failed' /]
+  [str.create hello o.set=module.x_str /]
+  
+  [arr.set module.arrset a={module.x_str} b='' c="hello"/] 
+  <ul>
+
+  <li> <strong>c.request_exists='req'</strong> 
+       Result:[module.success c.request_exists='req' /] : [request.get req /]</li>
+  <li> <strong>c.request_not_exists='req'</strong>
+       Result:[module.success c.request_not_exists='req' /]</li>
+  <li> <strong>c.exists='module.x_str'</strong>
+       Result:[module.success c.exists='module.x_str' /]</li>
+  <li> <strong> c.not_exists='module.b'</strong>
+       Result:[module.success c.not_exists='module.b' /]</li>
+  </ul>
+
+
+  <li><h3>Conditions for checking Contains</h3></li>
+    [module.set success='I suceeded' failed='I failed' /]
+    [str.create hello o.set=module.x_str /]
+    [arr.set module.arrset a={module.x_str} b='' c="hello"/] 
+    <ul>
+
+    <li> <strong> c.contains='s:hello' c.haystack='s:hello,hi,hope'</strong>
+        Result:[module.success c.contains='s:hello' c.haystack='s:hello,hi,hope' /]</li>
+    <li> <strong> c.contains='s:hell' c.haystack='module.arrset'</strong>
+        Result:[module.success c.contains='s:hell' c.haystack='module.arrset' /]</li>
+    <li> <strong> c.not_contains='s:hello' c.haystack='s:hello,hi,hope'</strong>
+        Result:[module.success c.not_contains='s:hello' c.haystack='s:hello,hi,hope' /]</li>
+    <li> <strong> c.not_contains='s:hell' c.haystack='module.arrset'</strong>
+        Result:[module.success c.not_contains='s:hell' c.haystack='module.arrset' /]</li>
+
+    </ul>
+  <li><h3>Conditions for checking User</h3></li>
+    [module.set success='I suceeded' failed='I failed' /]
+     <ul>
+
+    <li> <strong> c.user_can='administrator' </strong>
+      Result:[module.success c.user_can='administrator'  /]</li>
+    <li> <strong> c.user_cannot='subscriber' </strong>
+      Result:[module.success c.user_cannot='subscriber'  /]</li>
+    <li> <strong> c.logged_in='yes' </strong>
+      Result:[module.success c.logged_in='yes'  /]</li>
+    <li> <strong> c.not_logged_in='yes' </strong>
+      Result:[module.success c.not_logged_in='yes'  /]</li>
+
+     </ul>
+
+  <li><h3>Conditions for checking Yes/No, True/False,  Odd/Even </h3> </li>
+      [module.set success='I suceeded' failed='I failed' /]
+    [module.set y='5000' /]
+
+    [int.create 6250 o.set=module.int_even /]
+    [num.create 123.00 o.set=module.num_odd /]
+    [bool.create true o.set=module.y_bool /]
+    <ul>
+
+    <li> <strong> c.true="module.y_bool" </strong>
+       Result:[module.success c.true="module.y_bool" /]</li>
+    <li> <strong> c.true="b:5" </strong>
+       Result:[module.success c.true="b:5" /]</li>
+    <li> <strong> c.true="n:5" </strong>
+       Result:[module.success c.true="n:5" /]</li>
+    <li> <strong> c.false="n:5" </strong>
+       Result:[module.success c.false="n:5" /]</li>
+    <li> <strong>  c.false="b:5" </strong>
+       Result:[module.success c.false="b:5" /]</li>
+    <li> <strong> c.false="module.lapp_id" </strong>
+       Result:[module.success c.false="module.y" /]</li>
+
+    <li> <strong> c.yes='module.lapp_id' </strong>
+       Result:[module.success c.yes='module.y' /]</li>
+    <li> <strong> c.yes='s:yes </strong>
+       Result:[module.success c.yes='s:yes' /]</li>
+
+
+    <li> <strong> c.yes='yes' </strong>
+       Result:[module.success c.yes='yes' /]</li>
+    <li> <strong> c.no='module.lapp_id' </strong>
+       Result:[module.success c.no='module.y' /]</li>
+    <li> <strong> c.no='s:no' </strong>
+       Result:[module.success c.no='s:no' /]</li>
+    <li> <strong> c.no='no' </strong>
+       Result:[module.success c.no='no' /]</li>
+
+
+    <li> <strong> (Int Check - Casted to Int) c.even=module.int_even </strong>
+       Result:[module.success c.even='module.int_even' /]</li>
+    <li> <strong> c.even=i:{module.int_even} </strong>
+       Result:[module.success c.even=i:{module.int_even} /]</li>
+    <li> <strong> c.even=i:50 </strong>
+       Result:[module.success c.even=i:50 /]</li>
+    <li> <strong> c.odd=module.int_even </strong>
+       Result:[module.success c.odd=module.int_even /]</li>
+
+    </ul>
+[debug.ignore]
+
+  <li><h3> Conditions for checking Datatypes </h3></li>
+    [module.set y='5000' /]
+    [str.create hello o.set=module.x_str /]
+    [arr.set module.arrset a={module.x_str} b='' c="hello"/] 
+
+    [int.create 6250 o.set=module.int_even /]
+    [num.create 123.00 o.set=module.num_odd /]
+    [bool.create true o.set=module.y_bool /]
+    <ul>
+
+    <li><strong> c.arr='module.arrset'</strong>
+       Result:[module.success c.arr='module.arrset'/]</li>
+    <li><strong> c.not_arr='module.arrset'</strong>
+       Result:[module.success c.not_arr='module.arrset'/]</li>
+    <li><strong> c.str='module.x_str'</strong>
+       Result:[module.success c.str='module.x_str'/]</li>
+    <li><strong> c.not_str='module.arrset'</strong>
+       Result:[module.success c.not_str='module.arrset'/]</li>
+    <li><strong> c.bool='module.y_bool'</strong>
+       Result:[module.success c.bool='module.y_bool'/]</li>
+    <li><strong> c.not_bool='module.x_str'</strong>
+       Result:[module.success c.not_bool='module.x_str'/]</li>
+    <li><strong> c.int='module.int_even'</strong>
+       Result:[module.success c.int='module.int_even'/]</li>
+    <li><strong> c.not_int='module.num_odd'</strong>
+       Result:[module.success c.not_int='module.num_odd'/]</li>
+    <li><strong> c.num='module.num_odd'</strong>
+       Result:[module.success c.num='module.num_odd'/]</li>
+    <li><strong> c.not_num='module.num_odd'</strong>
+       Result:[module.success c.not_num='module.num_odd'/]</li>
+    <li><strong> c.obj='module.num_odd'</strong>
+       Result:[module.success c.obj='module.num_odd'/]</li>
+    <li><strong> c.not_obj='module.arrset'</strong>
+       Result:[module.success c.not_obj='module.arrset'/]</li>
+
+  <li><strong> c.zero='n:0'</strong>
+       Result:[module.success c.zero='n:0'/]</li>
+  <li><strong> c.positive='module.y'</strong>
+       Result:[module.success c.positive='module.y'/]</li>
+  <li><strong> c.negative='module.y'</strong>
+       Result:[module.success c.negative='module.y'/]</li>
+
+    </ul>
+  <li><h3>Conditions for checking Device </h3></li>
+    [module.set success='I suceeded' failed='I failed' /]
+    <ul>
+
+    <li> <strong> c.device='s:desktop' </strong>
+      Result:[module.success c.device='s:desktop'  /]</li>
+    <li> <strong> c.device='s:tablet,mobile' </strong>
+      Result:[module.success c.device='s:tablet,mobile'  /]</li>
+
+    </ul>
+
+
+
+  <li><h3>Conditions for ignore</h3></li>
+  [env.dump c.ignore='no'/] this will not dump the output.
+  
+[/debug.ignore]
+</ol>
+[/templates.add]
