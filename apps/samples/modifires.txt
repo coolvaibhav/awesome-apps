@@ -1,0 +1,245 @@
+[templates.add main]
+	
+  [module.set  str_a='I Passed the test. test is example' str_test='i failed <a>the</a> test' date="2018-10-02" number="142344" math_test="6*44" slashes="\ I am ' \" tags="<b>Bold tag</b>"/]
+  [arr.set module.arrset a="hi" b="there" c="hello"/]
+  [module.dump /]
+  <ol>       
+    <li>
+      <h3>modifier <strong>lower</strong>  m.lower </h3> 
+      <ul>
+        <li> [module.str_a m.lower='yes' /] </li>
+        <li> [module.str_test m.lower='yes' /]</li>      
+      </ul>
+    </li>
+    
+    <li>
+      <h3>modifier <strong>upper</strong>  m.upper </h3> 
+      <ul>
+        <li> [module.str_a m.upper='yes' /] </li>
+        <li> [module.str_test m.upper='yes' /]</li>      
+      </ul>
+    </li>
+    
+    <li>
+      <h3>modifier <strong>capitalize</strong>  m.capitalize </h3> 
+      <ul>
+        <li> [module.str_a m.capitalize='yes' /] </li>
+        <li> [module.str_test m.capitalize='yes' /]</li>      
+      </ul>
+    </li>
+    
+    <li>
+      <h3>modifier <strong>sentence</strong>  m.sentence </h3> 
+      <ul>
+        <li> [module.str_a m.sentence='yes' /] </li>
+        <li> [module.str_test m.sentence='yes' /]</li>      
+      </ul>
+    </li>
+    
+     <li>
+      <h3>modifier <strong>trim</strong>  m.trim </h3> 
+      <ul>
+        <li> [module.str_a m.trim='yes' /] </li>
+        <li> [module.str_test m.trim='yes' /]</li>      
+      </ul>
+    </li>
+    
+     <li>
+      <h3>modifier <strong>ltrim</strong>  m.ltrim </h3> 
+      <ul>
+        <li> [module.str_a m.ltrim='yes' /] </li>
+        <li> [module.str_test m.ltrim='yes' /]</li>      
+      </ul>
+    </li>
+    
+    <li>
+      <h3>modifier <strong>rtrim</strong>  m.rtrim </h3> 
+      <ul>
+        <li> [module.str_a m.rtrim='yes' /] </li>
+        <li> [module.str_test m.rtrim='yes' /]</li>      
+      </ul>
+    </li>
+    
+    <li>
+      <h3>modifier <strong>left</strong>  m.left </h3> 
+      <ul>
+        <li> [module.str_a m.left='n:3' /] </li>
+        <li> [module.str_test m.left='n:3' /]</li>      
+      </ul>
+    </li>
+    
+    <li>
+      <h3>modifier <strong>right</strong>  m.right </h3> 
+      <ul>
+        <li> [module.str_a m.right='n:10' /] </li>
+        <li> [module.str_test m.right='n:10' /]</li>      
+      </ul>
+    </li>
+    
+    <li>
+      <h3>modifier <strong>substring</strong>   m.substr='yes' m.start='n:10' m.chars='n:5'</h3> 
+      <ul>
+        <li> [module.str_a m.substr='yes' m.start='n:10' m.chars='n:5' /] </li>
+        <li> [module.str_test m.substr='yes' m.start='n:4' m.chars='n:5' /]</li>      
+      </ul>
+    </li>
+    
+     <li>
+      <h3>modifier <strong>length</strong>   m.length</h3> 
+      <ul>
+        <li>  [module.str_a m.length='yes' /] </li>
+        <li> [module.arrset m.length='yes' /]</li>      
+      </ul>
+    </li>
+    <li>
+      <h3>modifier <strong>create array</strong>   m.json_encode</h3> 
+      <ul>
+        <li>  [module.arrset m.json_encode='yes' /] </li>           
+      </ul>
+    </li>
+    <li>
+      <h3>modifier <strong>make json</strong>   m.json_decode</h3> 
+      <ul>
+        <li>  [module.arrset m.json_encode='yes'  m2.json_decode="yes" o.set=module.modified_arr/] </li>           
+      </ul>
+       [module.modified_arr.dump /]
+    </li>
+    <li>
+      <h3>modifier <strong>Remove slashes</strong>   m.stripslashes_deep</h3> 
+      <ul>
+        <li> [module.slashes m.stripslashes_deep='yes' /] </li>           
+      </ul>
+    </li>
+    <li>
+      <h3>modifier <strong>remove tags</strong>   m.strip_tags</h3> 
+      <ul>
+        <li>  [module.tags m.strip_tags='yes' /] </li>           
+      </ul>
+    </li>
+    <li>
+      <h3>modifier <strong>encode/decode</strong>   m.encrypt='yes'  m.decrypt='yes'</h3> 
+      <ul>
+        <li>  [module.str_test m.encrypt='yes' o.set='module.enc' /]
+        	[module.enc m.decrypt='yes' /]
+        </li>           
+      </ul>
+    </li>
+    
+  </ol>
+  
+  ====================================================================================
+<pre>
+  [[module.x m.explode_on='yes']] -> on comma
+  [[module.x m.explode_on='s:comma']] -> on comma
+  [[module.x m.explode_on='s:space']] -> on space
+  [[module.x m.explode_on='s:dot']] -> on dot
+  [[module.x m.explode_on='s:.']] -> on character
+  
+  [[module.str_test m.explode_on='s:space' o.set="module.explode" /]] - [module.str_test m.explode_on='s:space' o.set="module.explode" /] [module.dump explode/]
+</pre>
+====================================================================================
+<pre>
+  [[module.x m.implode_on='yes']] -> on comma
+  [[module.x m.implode_on='s:comma']] -> on comma
+  [[module.x m.explode_on='s:quote_comma']] -> on quote_comma
+  [[module.x m.implode_on='s:space']] -> on space
+  [[module.x m.implode_on='s:dot']] -> on dot
+  [[module.x m.implode_on='s:.']] -> on character
+  
+  [[module.explode m.implode_on='s:quote_comma' /]] - [module.explode m.implode_on='s:quote_comma'/]
+</pre>
+====================================================================================
+<pre>  
+  [[module.number m.to_num m2.number_format='yes' m2.decimals='n:2' /]] - [module.number m.to_num m2.number_format='yes' m2.decimals='n:2'/]
+</pre>
+====================================================================================
+<pre>  
+  [[module.date m.date_format='yes' /]] - Default format is 'M d, Y' - [module.date m.date_format='yes'/] 
+  [[module.date m.date_format='M y' /]] - [module.date m.date_format='M y'/]
+</pre>
+====================================================================================
+<pre>  
+  [[module.str_test m.words='yes' /]] - Default returns all words - [module.str_test m.words='yes'/] 
+  [[module.str_test m.words='n:3' /]] - [module.str_test m.words='n:3'/]
+</pre>
+====================================================================================
+<pre>
+  [[module.str_test m.url_encode='yes' o.set="module.url_encode" /]] - [module.str_test m.url_encode='yes' o.set="module.url_encode"/]  [module.url_encode /]
+</pre>
+====================================================================================
+<pre>
+  [[module.url_encode m.url_decode='yes' /]] - [module.url_encode m.url_decode='yes'/]
+</pre>
+====================================================================================
+<pre>
+  [[module.arrset /]] - [module.dump arrset /]
+  [[module.arrset m.arr_item='s:first' /]] - [module.arrset m.arr_item='s:first' /]
+  [[module.arrset m.arr_item='s:c' /]] - [module.arrset m.arr_item='s:c' /]
+  [[module.arrset m.arr_item='s:last' /]] - [module.arrset m.arr_item='s:last' /]
+  [[module.arrset m.arr_item='n:1' /]] - [module.arrset m.arr_item='n:1' /]
+</pre>
+====================================================================================
+<pre>
+  [[module.arrset m.shuffle='yes' o.set="module.shuffled" /]] - [module.arrset m.shuffle='yes' o.set="module.shuffled" /] [module.dump shuffled /]
+</pre>
+====================================================================================
+<pre>
+  [[module.str_test m.entities_encode='yes' /]] - [module.str_test m.entities_encode='yes' /]
+</pre>
+====================================================================================
+<pre>
+  [[module.str_test m.entities_decode='yes' /]] - [module.str_test m.entities_decode='yes' /]
+</pre>
+====================================================================================
+<pre>
+  [[module.str_test m.esc_sql='yes' /]] - [module.str_test m.esc_sql='yes' /]
+</pre>
+====================================================================================
+<pre>
+  [[module.math_test m.solve='yes' /]] - [module.math_test m.solve='yes' /]
+</pre>
+====================================================================================
+<pre>
+  [[module.str_test m.to_str='yes' /]] - [module.str_test m.to_str='yes' /]
+</pre>
+====================================================================================
+<pre>
+  [[module.number m.to_num='yes' /]] - [module.number m.to_num='yes' /]
+</pre>
+====================================================================================
+<pre>
+  [[module.number m.to_int='yes' /]] - [module.number m.to_int='yes' /]
+</pre>
+====================================================================================
+<pre>
+  [[module.number m.to_bool='yes' /]] - [module.number m.to_bool='yes' /]
+</pre>
+====================================================================================
+<ol>
+
+
+<li>
+    	<h3>modifier <strong>run</strong>  m.run </h3>
+      <ul>
+        <li> [module.str_a m.run='yes' /] </li>
+        <li> [module.str_test m.run='yes' /]</li>      
+      </ul>
+     </li>
+      
+    <li> Additional
+      <h3>modifier <strong>the_content</strong>  m.the_content  the content filter </h3> 
+      <ul>
+        <li> [module.str_a m.the_content='yes' /] </li>
+        <li> [module.str_test m.the_content='yes' /]</li>      
+      </ul>
+    </li>
+    <li>
+      <h3>modifier <strong>do_shortcode</strong>  m.do_shortcode </h3> 
+      <ul>
+        <li> [module.str_a m.do_shortcode='yes' /] </li>
+        <li> [module.str_test m.do_shortcode='yes' /]</li>      
+      </ul>
+    </li>
+  
+</ol>
+[/templates.add]

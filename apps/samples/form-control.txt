@@ -1,0 +1,55 @@
+[templates.add main]
+  
+  <div class="gap-4"></div>
+
+ 
+  [session_ticket.create o.set=template.ticket/]
+  [session_ticket.set_activity {template.ticket} app='{app.slug}' module='{module.slug}.submit' /]
+  
+  <h3> Contact Us </h3>
+  <section role="changing-form-block"> 
+
+    <form class="horizontal loan-tap-form" 
+      id="contact_us" 
+      novalidate
+     >
+
+      //** Load form fields according to steps **//
+      [form_control2.text id="full_name" label="Full Name" required=yes plcaceholder="Full Name" /]
+
+      [form_control2.email id="email_id" label="Email Id" placeholder="Email Id" required=yes /]
+      
+      [form_control2.textarea id="comment" label="Comment" placeholder="Comment" required=yes /]
+
+      [form_control2.button type="submit" value='<i class="fa fa-check icon icon-check"></i> Submit Details' /] 
+
+    </form>
+
+    <template 
+      type=spa/axn 
+      axn='form.ajax' 
+      bind='submit' 
+      bind_selector='#contact_us' 
+      route_ajax='t/[template.ticket/]' 
+      disable_selector='.btn' 
+     >
+    </template>  
+
+  </section>			
+
+
+
+  <div class="gap-4"></div>
+  
+  <div id="update-block"></div>
+     
+[/templates.add]
+
+[templates.add submit]
+	[template.set req={request2} /]
+	[template.echo /]
+  
+   <template axn=selector.update selector='#update-block' get='me.html'> 
+   	 <h3> [template.req.dump/] Thank you for showing interest </h3>
+   </template> 
+[/templates.add]

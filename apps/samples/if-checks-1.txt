@@ -1,0 +1,116 @@
+[templates.add main]
+ <h4>If Condition Demo</h4>
+<ol>
+
+  
+  [if.equal lhs="india" rhs="india"]
+    <li> india is <b>equal</b> to india  </li>	
+  [/if.equal]
+ 
+
+  
+  [if.equal lhs="india" rhs="INDIA"]
+    <li> india is <b>equal</b> to INDIA  </li>	
+  [/if.equal]
+  [if.else]
+  	<li> india is <b>not equal</b> to INDIA  </li>	
+  [/if.else]
+	
+  [template.set str_1="india" str_2="india" str_3="india" str_4="india"/] 
+  [if.equal lhs='{template.str_1}' rhs='{template.str_2}']
+  [/if.equal]
+  [if.and lhs='{template.str_3}' equal='{template.str_4}']
+  	<li> If and works  </li>	
+  [/if.and]
+  [if.else]
+  	<li> If and fails  </li>	
+  [/if.else]  
+	
+  [template.set str_1="indiaAA" str_2="in" str_3="india" str_4="india"/] 
+  [if.equal lhs='{template.str_1}' rhs='{template.str_2}']
+  [/if.equal]
+  [if.or lhs='{template.str_3}' equal='{template.str_4}']
+  	<li> If or works  </li>	
+  [/if.or]
+  [if.else]
+  	<li> If or fails  </li>	
+  [/if.else]  
+
+
+  [if.not_equal lhs="india" rhs="US"]
+    <li> india is <b>not_equal</b> to US  </li>	
+  [/if.not_equal]
+
+  [if.greater_equal lhs="14" rhs="14"]
+    <li> 14 is <b>greater_equal </b> to 14  </li>	
+  [/if.greater_equal]
+
+  [if.greater_than lhs="14" rhs="10"]
+    <li> 14 is <b>greater_than </b> to 10  </li>	
+  [/if.greater_than]
+  
+  [if.less_equal lhs="10" rhs="10"]
+    <li> 10 is <b>less_equal </b> to 10  </li>	
+  [/if.less_equal]
+  
+  [if.less_than lhs="9" rhs="10"]
+  	<li> 9 is <b>less_than </b> to 10  </li>	
+  [/if.less_than]
+	 
+  
+  [if.whitespace Hello world]
+  	<li> whitespace found</li>
+  [/if.whitespace]
+  
+  [template.set not_whitespace_str="Helloworld" /]
+  
+  [if.not_whitespace template.not_whitespace_str]
+  	<li> whitespace not found</li>
+  [/if.not_whitespace]
+
+	[template.set str_no="no" /]
+  [if.no template.str_no]
+  	<li>string value is no</li>
+  [/if.no]
+  
+	[template.set str_yes="yes" /]
+  [if.yes template.str_yes]
+  	<li>string value is yes</li>
+  [/if.yes]
+	
+  
+  [if.not_empty template.str_yes]
+  	<li> <b>[template.str_yes/]</b> : this string is not empty </li>
+  [/if.not_empty]
+  
+  [if.empty template.test]
+  	<li>THis string is empty</li>
+  [/if.empty]
+  
+	
+  [template.set odd_num=3/]
+  [if.odd template.odd_num]
+  	<li>3 is odd</li>
+  [/if.odd]
+  [if.even 12]
+  	<li>12 is even</li>
+  [/if.even]
+
+  [if.user_can administrator]
+  	<li>I am admin</li>
+  [/if.user_can]
+  [if.user_cannot Management]
+  	<li>I Dont have access of Management</li>
+  [/if.user_cannot]
+ 
+
+  [if.logged_in]
+  		<li>I am logged in</li>
+  [/if.logged_in]
+  [if.not_logged_in]
+  	<li>I am not logged in</li>
+  [/if.not_logged_in]
+
+   
+  
+[/templates.add]
