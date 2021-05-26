@@ -1,0 +1,49 @@
+[templates.add main]
+  
+  <div class="container [module.get slug /]-submit-poetry">
+    <h2 class="[module.get slug /]-heading">Submit</h2>
+    
+    [aw2.get token set='module.form_token' /] //** dynamic token creation - security reasons **//
+    
+    <form class='[module.form_token /]'>
+      <div class="form-group">
+        <label for="title"> Title:</label>
+        <input type="text" class="form-control width-100" id="dataa-title" name="dataa-title">
+      </div>
+      <div class="form-group">
+        <label for="description">Description:</label>
+        [form_control.textarea id="dataa-description" name="dataa-description" /]
+      </div>
+      <button type="submit" class="btn btn-success [module.form_token /]-submit"
+      	id="[module.get slug /]-submit" >Submit</button>
+    </form>   
+    
+    //** to send the form data **//
+   	[session_ticket.create nonce=yes set=module.ticket_id /]  
+    [arr.create set="module.collection"]
+    	[post_type]m_psuedo_poetry[/post_type]
+    [/arr.create]
+    
+    [session_ticket.set {module.ticket_id} field="email" value="test@amiworks.com" /]
+    [session_ticket.set {module.ticket_id} field="address" value="pune" /]
+    
+    [session_ticket.set_activity {module.ticket_id} 
+      collection='{module.collection}' module='{module.slug}.save_form' /] 
+      
+    <script type="spa/axn" axn='form.ajax' 
+    	bind='submit' 
+      bind_selector='.[module.form_token /]' 
+      disable_selector='.[module.form_token /]-submit'
+      route_ajax='t/[module.ticket_id /]' > </script>  
+
+  </div>
+  
+[/templates.add]
+
+//** save form function **//
+[templates.add save_form]
+
+	[session_ticket.get main="{template.ticket_id}" set=template.tkt_data /]
+	[aw2.get template.tkt_data dump=t /]
+
+[/templates.add]
