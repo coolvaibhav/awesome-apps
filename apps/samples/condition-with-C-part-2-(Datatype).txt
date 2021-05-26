@@ -1,0 +1,91 @@
+[templates.add main]
+
+	<h3> Conditions To Check the Datatype </h3>
+  	
+    //**string variable**//
+    [module.set y='5000' /]
+    [str.create hello o.set=module.x_str /]
+    [module.set success='Condition Matched'/]
+    
+    //**Array variable**//
+    [arr.set module.arrset a={module.x_str} b='' c="hello"/] 
+		
+    //**integer vaiable**//
+    [int.create 6250 o.set=module.int_even /]
+    
+    //**number variable**//
+    [num.create 123.00 o.set=module.num_odd /]
+    
+    //**Boolean variable**//
+    [bool.create true o.set=module.y_bool /]
+
+    
+    [module.dump /]
+    <ul>
+    <h3> Array condition c.arr="<>" c.not_arr</h3>
+    <li>  
+    	<strong> c.arr='module.arrset'</strong>
+      Result:[module.success c.arr='module.arrset'/]
+    </li>
+    <li>
+    	<strong> c.not_arr='module.arrset'</strong>
+       Result:[module.success c.not_arr='module.arrset'/]
+    </li>
+    
+    <h3>String condition c.str="<>" c.not_str</h3>
+    <li>
+    	<strong> c.str='module.x_str'</strong>
+       Result:[module.success c.str='module.x_str'/]
+    </li>
+    <li>
+    	<strong> c.not_str='module.arrset'</strong>
+       Result:[module.success c.not_str='module.arrset'/]
+    </li>
+    
+    <h3>boolean c.bool="<>", c.not_bool="<>" </h3>
+    <li><strong> c.bool='module.y_bool'</strong>
+       Result:[module.success c.bool='module.y_bool'/]
+    </li>
+    <li><strong> c.not_bool='module.x_str'</strong>
+       Result:[module.success c.not_bool='module.x_str'/]
+    </li>
+    
+    
+    <h3>Even c.int="<>", c.not_int="<>"</h3>
+    <li><strong> c.int='module.int_even'</strong>
+       Result:[module.success c.int='module.int_even'/]
+    </li>
+    <li><strong> c.not_int='module.num_odd'</strong>
+       Result:[module.success c.not_int='module.num_odd'/]
+    </li>
+    
+		
+    <h3>Number c.num="<>" c.not_num="<>"</h3>
+    <li><strong> c.num='module.num_odd'</strong>
+       Result:[module.success c.num='module.num_odd'/]
+    </li>
+    <li><strong> c.not_num='module.num_odd'</strong>
+       Result:[module.success c.not_num='module.num_odd'/]
+    </li>
+    
+    <h3>Object c.obj="<>" c.not_obj="<>" </h3>
+    <li><strong> c.obj='module.num_odd'</strong>
+       Result:[module.success c.obj='module.num_odd'/]
+    </li>
+    <li><strong> c.not_obj='module.arrset'</strong>
+       Result:[module.success c.not_obj='module.arrset'/]
+    </li>
+    
+    <h3>Additional Checks </h3>
+    <li><strong> c.zero='n:0'</strong>
+     Result:[module.success c.zero='n:0'/]
+    </li>
+    <li><strong> c.positive='module.y'</strong>
+     Result:[module.success c.positive='module.y'/]
+    </li>
+    <li><strong> c.negative='module.y'</strong>
+     Result:[module.success c.negative='module.y'/]
+    </li>
+    </ul>
+ 
+[/templates.add]
