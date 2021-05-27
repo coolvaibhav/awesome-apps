@@ -1,0 +1,68 @@
+single-content-layout
+[wp.get post.post_title /]
+[wp.get post.author_meta.display_name /]
+[wp.get post.post_date date_format="F d, Y" /]
+[backend_design.layout /]
+[wp.get post.the_content /]
+
+
+<div class="col-lg-8 col-md-10 col-sm-10 col-12 blog-blok">
+        <div class="gap-7"></div>
+  		
+  		  <h1 class="font-bold">[wp.get post.post_title /]</h1>
+  		  <p class="font-size-smallest gray">[wp.get post.post_date date_format="F d, Y" /]</p>
+        
+          <div class="gap-5"></div>
+    		  <img src="[wp.get post.featured_image_url size=large /]" alt="[wp.get post.post_title /]" class="width-100" />
+  		
+  		  <div class="gap-5"></div>
+  		  <div class="pad-x-5">
+  			  [wp.get post.the_content /]
+        </div>
+        <div class="gap-5"></div>
+        
+        //*********************** Tag section *********************************//
+        [if.not_empty post.taxonomy.all.post_tag.count]
+        <div class="dash"></div>
+        <div class="gap-3"></div>
+        <div class="pad-x-5">
+          <h4>Tags:</h4>
+          
+          [loop.@tags post.taxonomy.all.post_tag]
+            <span class="pad-x-1"><a href="#" class="brand-primary pad-x-5 tag br-2 text-uppercase">
+              [env.get @tags.item.name /]</a></span>
+              [env.set slug_list.new="{@tags.item.slug}" /]
+          [/loop.@tags]          
+        </div>
+        <div class="gap-8"></div>
+        [/if.not_empty]
+        
+
+ 
+        //*********************** next pre post section *********************************//
+        [php.get_previous_post set="module.previous_post" /]
+        [php.get_next_post set="module.next_post" /]
+        
+        <div class="dash-bord">
+          <div class="row">
+            [if.not_empty module.previous_post]
+				    <div class="[if.not_equal lhs='{module.next_post}' rhs='']col-md-6 col-6 next-prev[/if.not_equal][if.else]col-md-12 col-12[/if.else]">
+              <div class="gap-3"></div>
+					    <p><a href="[module.get previous_post.url /]" title="[module.get previous_post.post_title /]" class="brand-secondary"><i class="icon-arrow-left" aria-hidden="true"></i>  <span class="text-uppercase">Previous post</span> </a></p>
+						    <h4><a href="[module.get previous_post.url /]" title="[module.get previous_post.post_title /]" class='gray-darker'>[module.get previous_post.post_title /]</a></h4>
+					    <div class="gap-3"></div>
+				    </div>
+				    [/if.not_empty]
+            
+				    [if.not_empty module.next_post]
+				      <div class="[if.not_equal lhs='{module.previous_post}' rhs='']col-md-6 col-6 pull-right[/if.not_equal][if.else]col-md-12 col-12[/if.else]">
+                <div class="gap-3"></div>
+					      <p class="text-uppercase text-right"><a href="[module.get next_post.url /]" title="[module.get next_post.post_title /]" class="brand-secondary"> <span class="text-uppercase">Next post</span>  <i class="icon-arrow-right" aria-hidden="true"></i> </a></p>
+						    <h4 class="text-right"><a href="[module.get next_post.url /]" title="[module.get next_post.post_title /]" class='gray-darker'> [module.get next_post.post_title /]</a></h4>
+					      <div class="gap-3"></div>
+				      </div>
+				    [/if.not_empty]
+          </div>
+        </div>
+        <div class="gap-8"></div>
+      </div>
