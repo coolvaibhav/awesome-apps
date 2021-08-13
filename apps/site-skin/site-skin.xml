@@ -6300,7 +6300,7 @@ padding-bottom: calc(.75rem / 3);
 margin-top: 10px !important;
 margin-bottom: -10px !important;
 }
-[/css.less]
+
 @supports (-ms-ime-align: auto) {
 .floating-label > label {
 display: none;
@@ -6336,7 +6336,7 @@ color: rgb(93,93,93,.5) !important;
 .floating-label input::placeholder {
 color: rgb(93,93,93,.5) !important;
 }
-}				]]></content:encoded>
+} [/css.less]				]]></content:encoded>
 	<excerpt:encoded><![CDATA[
 			
 							]]></excerpt:encoded>
