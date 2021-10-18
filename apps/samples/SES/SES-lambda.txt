@@ -1,0 +1,15 @@
+require 'json'
+require 'net/http'
+require 'uri'
+
+def lambda_handler(event:, context:)
+    ses_mail = event["Records"][0]["ses"]["mail"]
+    puts ses_mail
+    url = "<webhook-url>"
+    uri = URI.parse(url)
+    response = Net::HTTP.post URI(uri),
+               { "mail" => ses_mail['messageId']}.to_json,
+               "Content-Type" => "application/json"
+end
+
+aw2DevFetchEmail

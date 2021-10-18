@@ -1,0 +1,20 @@
+[templates.add config]
+	  
+	[template.set_array config]			
+		[authentication]
+			[IAM_KEY]<YOUR-IAM_KEY>[/IAM_KEY]
+			[IAM_SECRET]<YOUR_IAM_SECRET>[/IAM_SECRET]
+			[bucket]<your-bucket>[/bucket]
+			[aws_version]latest[/aws_version]
+			[aws_region]us-west-2[/aws_region]
+			[file_path]/tmp/[/file_path]
+		[/authentication]
+		[regex_pattern]
+			[ticket](helpticket\@help\.aw2\.status\.dev)[/ticket]
+		[/regex_pattern]
+
+	[/template.set_array]
+  
+  [template.return template.config/]
+	
+[/templates.add]
