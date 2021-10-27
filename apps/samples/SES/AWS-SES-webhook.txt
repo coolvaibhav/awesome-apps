@@ -1,0 +1,68 @@
+[templates.add main]
+	  
+  //**set the response**//
+  [template.set request="{request.request_body}"/]  
+  [template.request json_decode=true o.set=template.result/]
+  
+  //**get the key name**//
+  [template.get result.mail default="<YOUR-KEY-TO-DEBUG>" o.set=template.key_name /]
+ 
+  //**Insert ses response To log **//
+  [mysqli.multi.cud o.set=template.res]
+  	INSERT INTO `ses_webhook` (`webhook_response`) VALUES ('[template.key_name/]');
+  [/mysqli.multi.cud] 
+  
+  //**Call start process**//
+  [templates.start_process key_name={template.key_name} o.set=template.temp_res/]
+  
+[/templates.add]
+
+
+[templates.add start_process]
+	
+  //**Fetch AWS Config
+	You can create service of AWS and can call like this
+	[aws_services.aws-config.config o.set=template.config/]
+**//
+  [templates.config o.set=template.config/]
+  
+  //**File path**//
+  [template.set file_path="{template.config.authentication.file_path}{template.key_name}.txt" /]
+  
+  //**Email Data**//
+  [aws_ses.fetch_ses_email config="{template.config.authentication}"  keyname="{template.key_name}" file_path="{template.file_path}" regex_check={template.config.regex_pattern} o.set=template.result/]
+  	
+  //**email result**//
+  [template.set email={template.result.data} /] 
+	
+  [mysqli.multi.cud o.set=template.res]
+  	update ses_webhook set email_data='[template.email.json_encode/]' where webhook_response="[template.key_name/]";
+  [/mysqli.multi.cud] 
+  
+  //**Delete bucket**//
+  [aws_s3.delete_file config="{template.config.authentication}"	bucket_name="{template.config.authentication.bucket}" path="{template.key_name}" o.set=template.res/]  
+  
+  [template.echo/]
+  
+[/templates.add]
+
+[templates.add config]
+	  
+	[template.set_array config]			
+		[authentication]
+			[IAM_KEY]<YOUR_IAM_KEY>[/IAM_KEY]
+			[IAM_SECRET]<YOUR_IAM_SECRET>[/IAM_SECRET]
+			[bucket]<YOUR_BUCKT_NAME>[/bucket]
+			[aws_version]latest[/aws_version]
+			[aws_region]us-west-2[/aws_region]
+			[file_path]/tmp/[/file_path]
+		[/authentication]
+		[regex_pattern]
+			[ticket](helpticket\@help\.aw2\.status\.dev)[/ticket]
+		[/regex_pattern]
+
+	[/template.set_array]
+  
+  [template.return template.config/]
+	
+[/templates.add]
