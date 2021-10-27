@@ -440,7 +440,7 @@
           [query.update_post_meta post_id="{template.ticket_data.post_id}"]
              [template.get form_meta_json /]
           [/query.update_post_meta]
-
+		  [service.run main={template.settings_config_array.callback_handler} form_data='{module.form_meta}' c.not_empty='template.settings_config_array.callback_handler'/]
     [/if.not_empty]
 
     <script type="spa/axn" axn="core.run_script" alert="Settings Saved successfully!"></script>
