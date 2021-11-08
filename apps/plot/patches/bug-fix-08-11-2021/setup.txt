@@ -1,3 +1,8 @@
 Patch for API
+1. goto plot App -> Module 
+2. Edit API module
+3. Replace it with following code
+
+OR
 
 1.  Go to moudle Plot/module/api and replace the whole code with the in "api-fix.txt" file.
