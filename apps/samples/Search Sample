@@ -1,0 +1,148 @@
+[templates.add conf]
+	[template.set table_name='lapp_meta' /]
+  [template.return template.table_name /]
+[/templates.add]
+
+[templates.conf o.set=module.db_name/]
+
+[templates.add main]
+[env.set app.page_title="Manage Loan Applications" /]
+
+<style>
+.listbt{
+    border: 1px solid #ccc;
+    cursor: pointer;
+    padding: 3px;
+    min-width:24px;
+    min-height:22px;
+    display: inline-block;
+    text-align:center;
+}
+.listbt:hover{
+	 opacity: 0.5;
+}
+.collapse.in {
+    display: none;
+}
+body .collapse.show{
+	display:block;
+}
+.table tbody tr:hover{
+background: #eee;
+}
+</style>
+
+	[modules.ui.menu mod='{module.slug}'/]
+    
+    
+
+  [module.set_array args]
+    [atts mod='{module.slug}'/]    
+      [handlers]
+          [fasttable handler=datatable label="<i class='fa fa-check'></i> Fast(300)" max_count=300][/fasttable]
+          [datatable label="<i class='fa fa-table'></i> All Data (Slow)"]
+
+          [/datatable]
+          [csv label="<i class='fa fa-download'></i> Download CSV" filename='reconcile.csv'][/csv]
+      [/handlers]       
+      [sections]
+      [filter2 title="Search Filters" open="no"]
+          [html] 
+              <div class="col-md-4">
+                [form_control.text id="exact_search" label='Exact Search' /]
+              </div>
+          [/html]
+        [/filter2]
+
+
+
+    [/sections]
+  [/module.set_array]
+
+
+[module.set_raw temp_column]
+  [column new label='Application Id' meta_key='lapp_id'  /]
+  [column new label='Full Name' meta_key='full_name'  /]
+  [column new label='Mobile Number' meta_key='mobile_number'  /]
+  [column new label='Personal Email' meta_key='personal_email'  /]
+  [column new label='Current Step' meta_key='current_step'  /]
+          
+[/module.set_raw]
+
+
+[module.set_raw temp_filter]
+	[add_field new]
+    [sql raw]
+      select pquery.*,meta_value as mobile_number from [esc.table module.previous_query_no /] AS pquery join lapp_meta on lapp_id=object_id WHERE coll_id='lapp' and meta_key='mobile_number'
+   [/sql]
+
+  [/add_field]
+  [filter new not_empty="{form_data.exact_search}"]
+    [sql raw]
+      select pquery.* from [esc.table module.previous_query_no /] AS pquery join lapp_meta on lapp_id=object_id  WHERE coll_id='lapp' and meta_key in ('mobile_number','personal_email') and meta_value ="[env.form_data.exact_search/]"
+   [/sql]
+ [/filter]
+ 
+[/module.set_raw]
+
+
+
+[module.set_raw call_id]
+	[column new label='id']
+		 [calc raw]     
+     		<a href="[env.app.path/]/single-error/[env.row.ID /]" target="_blank" rel="noopener">[env.row.ID /]</a>      
+   		[/calc]
+ [/column]	
+[/module.set_raw]
+
+
+[module.set_raw order]
+	[order not_empty="{form_data.order_1}{form_data.order_2}{form_data.order_3}"]
+     [do.@i]
+        [env.form_data.order_1 o.set=form_data.order_str.new c.not_empty="env.form_data.order_1"/]
+        [env.form_data.order_2 o.set=form_data.order_str.new c.not_empty="env.form_data.order_2"/]
+        [env.form_data.order_3 o.set=form_data.order_str.new c.not_empty="env.form_data.order_3"/]   
+        [env.form_data.order_str.comma not_empty="{form_data.order_str.count}"/]
+     [/do.@i]
+ [/order]
+[/module.set_raw]
+
+
+    [module.set args.after_submit]
+        [query]  
+        
+          [pagesize]100[/pagesize]         
+            [with]
+               [sql]
+                 SELECT object_id as data_id,object_id as lapp_id FROM lapp_meta where coll_id ='lapp' and meta_key='lapp_id'
+                [/sql]  
+                
+                [module.temp_filter/]           
+            [/with]     
+           [module.order/]
+          [transform ref_id=data_id /]
+          [meta new ref_id='lapp_id']
+          [table]lapp_meta[/table]
+          [aw2_collection_keys]lapp_id,full_name,personal_email,mobile_number,current_step[/aw2_collection_keys]
+          [coll_id]lapp[/coll_id]
+          [/meta]
+        [/query]
+        [table]
+            [module.temp_column/] 
+          
+        [/table]
+    [/module.set]
+
+
+
+     [do.@build_page]    
+         <div class='gap-2'></div>
+          <h2 class='text-center'>[env.app.page_title/]</h2>
+          <div class='gap-2'></div>
+          [template.tbl_html/]
+          [template.html/]
+          [search2.views args={module.args}/]
+    [/do.@build_page]  
+    
+  
+[/templates.add]
