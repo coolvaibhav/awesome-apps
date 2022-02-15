@@ -205,11 +205,8 @@
     [/if.not_empty]
 
     [if.empty template.submit_to]
-      [arr.create set="template.collection_array"]
-        [post_type][module.collection.post_type /][/post_type]
-      [/arr.create]
       //** Set activity against the ticket **//
-      [session_ticket.set_activity {template.ticket} collection={template.collection_array} module='auto-save' /]
+      [session_ticket.set_activity {template.ticket} collection={module.collection} module='auto-save' /]
     [/if.empty]
 
 
