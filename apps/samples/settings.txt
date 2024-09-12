@@ -1,0 +1,56 @@
+[templates.add settings]
+	//** Tabs: Will create 2 tabs... General Setting & Maintaneance settings **//
+	[env.set_array settings_navigation]
+		[navs general-settings form_name="general-settings" label="General Setting" default_form="yes" /]
+		[navs maintenance-settings form_name="maintenance-settings" label="Maintenance Setting" default_form="no" /]
+	[/env.set_array]
+
+	[env.set_array general-settings]
+      [atts do_validation="no" /]
+      [atts save_handler='' /]
+      [atts callback_handler='' /]
+      [atts submit_button='yes' /]
+      [atts form_control_service="form_control" /]
+      [atts allowed_fields]           
+		[col fields_key]
+        	//** List all the field names comma separated, so code will save only these fields after form submission **//
+        	[fields]email,address,favicon,ga-code[/fields]
+        [/col]
+	  [/atts]
+      [groups]
+        [general-set label="Contact Settings" class="general-settings-fields"]
+          //**General Settings**//
+          [field email label="Any Email" type="email" edit=yes parent_class='col-md-6 mar-t-5' value='' /]
+          [field address label="Address" type="textarea" edit=yes parent_class='col-md-6 mar-t-5' value='' /]
+          
+        [/general-set]
+        [extra-ay label="Extra Settings" class="general-settings-fields"]
+          [field favicon label="Favicon" type="text" edit=yes parent_class='col-md-6 mar-t-5' value='' /]
+          [field ga-code label="GA Code" type="text" edit=yes parent_class='col-md-6 mar-t-5' value='' /]
+        [/extra-ay]
+      [/groups]
+  [/env.set_array]
+  
+	[env.set_array maintenance-settings]
+      [atts do_validation="no" /]
+      [atts save_handler='' /]
+      [atts callback_handler='' /]
+      [atts submit_button='yes' /]
+      [atts form_control_service="form_control" /]
+      [atts allowed_fields]           
+				[col fields_key]
+        	//** List all the field names comma separated, so code will save only these fields after form submission **//
+        	[fields]html,mode[/fields]
+        [/col]
+			[/atts]
+      [groups]
+        [general-set label="Contact Settings" class="general-settings-fields"]
+          //**General Settings**//
+          [field mode label="Enable Maintance Mode" type="text" edit=yes parent_class='col-md-6 mar-t-5' value='' /]
+          [field html label="Maintance Mode HTML" type="textarea" edit=yes parent_class='col-md-6 mar-t-5' value='' /]
+          
+        [/general-set]
+      [/groups]
+  [/env.set_array]
+
+[/templates.add]

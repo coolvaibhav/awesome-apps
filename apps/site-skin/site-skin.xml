@@ -362,7 +362,11 @@
 		<wp:post_type><![CDATA[c_skin]]></wp:post_type>
 		<wp:post_password><![CDATA[]]></wp:post_password>
 		<wp:is_sticky>0</wp:is_sticky>
-														<wp:postmeta>
+											<wp:postmeta>
+		<wp:meta_key><![CDATA[enable-cache]]></wp:meta_key>
+		<wp:meta_value><![CDATA[yes]]></wp:meta_value>
+		</wp:postmeta>
+									<wp:postmeta>
 		<wp:meta_key><![CDATA[brand-primary]]></wp:meta_key>
 		<wp:meta_value><![CDATA[#f15f25]]></wp:meta_value>
 		</wp:postmeta>
@@ -6296,7 +6300,7 @@ padding-bottom: calc(.75rem / 3);
 margin-top: 10px !important;
 margin-bottom: -10px !important;
 }
-[/css.less]
+
 @supports (-ms-ime-align: auto) {
 .floating-label > label {
 display: none;
@@ -6332,7 +6336,7 @@ color: rgb(93,93,93,.5) !important;
 .floating-label input::placeholder {
 color: rgb(93,93,93,.5) !important;
 }
-}				]]></content:encoded>
+} [/css.less]				]]></content:encoded>
 	<excerpt:encoded><![CDATA[
 			
 							]]></excerpt:encoded>

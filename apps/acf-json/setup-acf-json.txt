@@ -1,0 +1,11 @@
+Curent Version: 1.0
+Setup instructions
+-------------------
+
+1. Import acf-json.xml via wordpress importer.
+2. You may have to do it twice, due to limitation of WordPress.
+
+In case of updating
+
+1. Thrash the acf-json modules and empty the thrash
+
